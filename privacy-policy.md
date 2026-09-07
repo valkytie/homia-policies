@@ -36,7 +36,7 @@ The free experience may display Google AdMob advertising. Where required, Google
 
 ### Purchases
 
-Apple or Google processes payment details. Homia receives store transaction information needed for trusted receipt verification, entitlement status, restoration, refunds, revocation, and subscription expiry. The app does not store full payment-card details and does not grant paid access from an unverified device result.
+For the Taiwan App Store first release, Apple processes payment details. Homia receives Apple transaction information needed for trusted receipt verification, entitlement status, restoration, refunds, revocation, and subscription expiry. The app does not store full payment-card details and does not grant paid access from an unverified device result.
 
 ### Deletion and retention
 
@@ -80,7 +80,7 @@ ZIP 備份是照顧者主動建立的手動、開放式匯出。Firebase 家庭�
 
 ### 購買
 
-Apple 或 Google 處理付款細節。嚮家會收到商店交易資訊，用於可信收據驗證、權益狀態、還原購買、退款、撤銷與訂閱到期。App 不儲存完整信用卡資料，也不會僅憑未驗證的裝置結果授予付費權益。
+台灣 App Store 首發的付款資料由 Apple 處理。嚮家會收到 Apple 交易資訊，用於可信收據驗證、權益狀態、還原購買、退款、撤銷與訂閱到期。App 不儲存完整信用卡資料，也不會僅憑未驗證的裝置結果授予付費權益。
 
 ### 刪除與保留
 

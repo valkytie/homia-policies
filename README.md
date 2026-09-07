@@ -4,5 +4,6 @@ Public bilingual (English / 繁體中文) support pages for the Homia / 嚮家 a
 
 - [Privacy Policy / 隱私權政策](privacy-policy.html)
 - [Support and Data Deletion / 客服與資料刪除](support-and-data-deletion.html)
+- [Terms of Service / 服務條款](terms-of-service.html)
 
 Contact: valkytie@gmail.com
