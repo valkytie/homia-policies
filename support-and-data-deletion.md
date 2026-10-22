@@ -1,10 +1,16 @@
 # Homia / 嚮家 Support and Data Deletion 客服與資料刪除
 
-_Last updated / 最後更新：2026-09-03_
+_Last updated / 最後更新：2026-10-22_
+
+**[回報問題／Report a bug →](report-a-bug.html)**
+
+Android／iOS 遇到錯誤或操作問題，可填寫回報表單並附選填截圖。表單需要 Google 登入；不便登入時可使用下方客服 Email。原有隱私與帳號刪除說明仍見下方。
 
 ## English
 
 ### Support
+
+[Report a bug or share feedback](report-a-bug.html): use the form with an optional redacted screenshot, or the email alternative. The form requires Google sign-in and does not publish your response to other testers.
 
 For support, privacy, or data questions, contact: valkytie@gmail.com. When reporting an issue, please include the app version, platform, device model, and an approximate event time. Never send passwords, full store credentials, private keys, or an unrestricted ZIP backup in messages. Redact logs and screenshots before sharing.
 
@@ -31,6 +37,8 @@ If account deletion is available in your app version, open the app and use Setti
 ## 繁體中文
 
 ### 客服
+
+[回報問題與使用回饋](report-a-bug.html)：可填寫表單並附選填截圖，或使用 Email 備用管道。表單需要 Google 登入，回覆不公開給其他測試者。
 
 客服、隱私或資料問題請聯絡：valkytie@gmail.com。回報問題時請附上 App 版本、平台、裝置型號與大約發生時間。請勿在訊息中提供密碼、完整商店憑證、私密金鑰或未限制內容的 ZIP 備份；分享 log 或截圖前請先遮蔽敏感資料。
 
