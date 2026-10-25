@@ -37,3 +37,21 @@ npm run deploy
 推送 GitHub 不會自動更新 Cloudflare。每次更新都需執行測試與 `npm run deploy`，再以公開網址檢查首頁、四份政策、QR 與不存在路徑的 404。Wrangler 的標準 HTML 路由會將 `privacy-policy.html` 等入口轉向無副檔名網址，原 `.html` 連結仍可開啟。GitHub Pages 原有政策網址持續保留，既有 App／商店設定可繼續使用。
 
 舊 GitHub Pages 首頁會以 `location.replace` 導向新官網，保留查詢與段落錨點；僅限本 repo 的首頁路徑，不影響任何政策／客服頁。停用 JavaScript 時仍可閱讀原內容，並使用頁尾的「嚮家官網」連結。Cloudflare 官網不會再轉址。
+
+## 首頁字型與產品圖片
+
+首頁標題使用自架 Noto Serif TC Medium 2.003 子集，正文與政策頁維持系統黑體。WOFF2 為 69,728 bytes，授權全文位於 `assets/fonts/OFL.txt`；官方來源、原檔與子集 SHA256 及涵蓋字元記錄於 `tools/font-manifest.json`。不載入 Google Fonts CDN 或第三方資產。瀏覽器不支援或字型載入失敗時使用系統宋體／serif fallback。
+
+修改首頁 h1–h3、圖說或信件抬頭／署名後，請重新子集化，避免缺字。以下只修改專用 venv，不調整系統 Python：
+
+```sh
+python3 -m venv /tmp/homia-font-tools
+/tmp/homia-font-tools/bin/python -m pip install fonttools==4.67.0 brotli==1.2.1
+curl -fL -o /tmp/NotoSerifTC-Medium.otf https://raw.githubusercontent.com/notofonts/noto-cjk/Serif2.003/Serif/SubsetOTF/TC/NotoSerifTC-Medium.otf
+/tmp/homia-font-tools/bin/python tools/subset-font.py /tmp/NotoSerifTC-Medium.otf
+/tmp/homia-font-tools/bin/python tools/subset-font.py --check
+npm test
+npm run build
+```
+
+產品圖 `assets/app-home.jpg` 是已用於商店素材的真實 Android 首頁原檔副本，示範資料，不生成／修改 UI、不加假手機外框。完整來源、裝置與內容檢查見 [素材紀錄](docs/redesign-assets-2026-10-25.md)。新增圖片仍須先檢查帳號、私人照片、邀請碼及 QR，且不得把原生 App 截圖誤稱為官網實機驗收。

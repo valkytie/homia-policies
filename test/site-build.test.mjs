@@ -1,16 +1,19 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, cp, mkdir, readFile, readdir, writeFile, rm, symlink } from 'node:fs/promises';
+import { mkdtemp, cp, mkdir, readFile, readdir, writeFile, rm, symlink, access } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import { runInNewContext } from 'node:vm';
+import { createHash } from 'node:crypto';
 
 const project = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const builder = path.join(project, 'tools/build-site.mjs');
 const policies = ['privacy-policy', 'support-and-data-deletion', 'terms-of-service', 'report-a-bug'];
 const siteUrl = 'https://homia-build-test.example/';
+const textContent = html => html.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 
 async function fixture(t) {
   const root = await mkdtemp(path.join(tmpdir(), 'homia-site-test-'));
@@ -25,6 +28,85 @@ async function fixture(t) {
 function build(root, args = []) {
   return spawnSync(process.execPath, [builder, ...args], { cwd: root, encoding: 'utf8' });
 }
+
+function assertSameBody(before, after) {
+  const extract = html => {
+    const match = html.match(/<body\b[^>]*>[\s\S]*<\/body\s*>/i);
+    assert.ok(match, 'Expected a complete body element before comparing content.');
+    return match[0];
+  };
+  assert.equal(extract(after), extract(before));
+}
+
+test('body preservation detects changed content when body has attributes', () => {
+  assert.throws(() => assertSameBody(
+    '<body class="home"><main>approved story</main></body>\n',
+    '<body class="home"><main>changed story</main></body>\n'
+  ), assert.AssertionError);
+});
+
+test('body preservation refuses documents without a complete body', () => {
+  assert.throws(() => assertSameBody('<main>no body</main>\n', '<main>no body</main>\n'), /body/);
+});
+
+test('keeps the approved founder story, Watch explanation, FAQ answers and policy sources', async () => {
+  const approved = JSON.parse(await readFile(path.join(project, 'test/fixtures/approved-content.json'), 'utf8'));
+  const html = await readFile(path.join(project, 'index.html'), 'utf8');
+  const story = html.match(/<section\b[^>]*id="story"[^>]*>([\s\S]*?)<\/section>/)?.[1];
+  assert.ok(story, 'Founder story must remain present.');
+  const paragraphs = [...story.matchAll(/<p\b[^>]*>([\s\S]*?)<\/p>/g)].map(m => textContent(m[1]));
+  assert.deepEqual(paragraphs.filter(p => approved.story.includes(p)), approved.story);
+  const details = [...html.matchAll(/<details\b[^>]*>([\s\S]*?)<\/details>/g)];
+  assert.equal(details.length, Object.keys(approved.faq).length);
+  for (const [, detail] of details) {
+    const question = textContent(detail.match(/<summary[^>]*>([\s\S]*?)<\/summary>/)[1]);
+    const answer = textContent(detail.match(/<div[^>]*>([\s\S]*?)<\/div>/)[1]);
+    assert.equal(sha256(answer), approved.faq[question], question);
+  }
+  const allParagraphs = [...html.matchAll(/<p\b[^>]*>([\s\S]*?)<\/p>/g)].map(m => textContent(m[1]));
+  for (const paragraph of approved.watch) assert.ok(allParagraphs.includes(paragraph), paragraph);
+  for (const [file, hash] of Object.entries(approved.policies)) {
+    assert.equal(sha256(await readFile(path.join(project, file))), hash, file);
+  }
+});
+
+test('every local homepage and CSS asset exists and no third-party runtime assets are requested', async () => {
+  const html = await readFile(path.join(project, 'index.html'), 'utf8');
+  const css = await readFile(path.join(project, 'assets/site.css'), 'utf8');
+  for (const [, ref] of html.matchAll(/(?:src|href)="(assets\/[^"]+)"/g)) await access(path.join(project, ref));
+  for (const [, , ref] of css.matchAll(/url\((['"]?)(.*?)\1\)/g)) {
+    assert.ok(!/^(?:https?:)?\/\//i.test(ref), ref);
+    await access(path.join(project, 'assets', ref));
+  }
+  assert.ok(!/@import\b/.test(css), 'Stylesheets must be local.');
+  assert.ok(!/<iframe\b/i.test(html));
+  for (const [, tag, attributes] of html.matchAll(/<(img|script|link|source)\b([^>]*)>/gi)) {
+    if (tag.toLowerCase() === 'link' && /rel="canonical"/.test(attributes)) continue;
+    for (const [, ref] of attributes.matchAll(/(?:src|href)="([^"]+)"/g)) {
+      assert.ok(!/^(?:https?:)?\/\//i.test(ref), ref);
+    }
+  }
+});
+
+test('the pinned font subset covers all homepage serif text and policy pages do not preload it', async t => {
+  const manifest = JSON.parse(await readFile(path.join(project, 'tools/font-manifest.json'), 'utf8'));
+  const font = await readFile(path.join(project, 'assets/fonts/noto-serif-tc-500.woff2'));
+  assert.equal(font.subarray(0, 4).toString(), 'wOF2');
+  assert.ok(font.length <= 180 * 1024);
+  assert.equal(sha256(font), manifest.sha256);
+  const html = await readFile(path.join(project, 'index.html'), 'utf8');
+  const text = [...html.matchAll(/<(h[1-3]|figcaption)\b[^>]*>([\s\S]*?)<\/\1>/gi)].map(m => textContent(m[2])).join('') +
+    [...html.matchAll(/<(p|footer)\b[^>]*class="letter-(?:meta|signature)"[^>]*>([\s\S]*?)<\/\1>/gi)].map(m => textContent(m[2])).join('');
+  const available = new Set(manifest.codepoints);
+  for (const character of text) assert.ok(available.has(character.codePointAt(0)), `Missing font character: ${character}`);
+  const root = await fixture(t);
+  assert.equal(build(root).status, 0);
+  for (const name of policies) {
+    const policy = await readFile(path.join(root, `dist/${name}.html`), 'utf8');
+    assert.ok(!/<link\b[^>]*as="font"/.test(policy));
+    assert.ok(!/<body\b[^>]*class="home"/.test(policy));
+  }
+});
 
 async function files(root, prefix = '') {
   const result = [];
@@ -42,7 +124,7 @@ test('builds the complete site with new metadata and preserves the homepage body
   assert.equal(result.status, 0, result.stderr);
   const before = await readFile(path.join(root, 'index.html'), 'utf8');
   const after = await readFile(path.join(root, 'dist/index.html'), 'utf8');
-  assert.equal(after.slice(after.indexOf('<body>')), before.slice(before.indexOf('<body>')));
+  assertSameBody(before, after);
   assert.ok(after.includes(`<link rel="canonical" href="${siteUrl}">`));
   assert.ok(after.includes(`content="${siteUrl}assets/homia-icon.png"`));
   for (const name of policies) {
