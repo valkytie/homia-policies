@@ -40,7 +40,7 @@ npm run deploy
 
 ## 首頁字型與產品圖片
 
-首頁標題使用自架 Noto Serif TC Medium 2.003 子集，正文與政策頁維持系統黑體。WOFF2 為 69,728 bytes，授權全文位於 `assets/fonts/OFL.txt`；官方來源、原檔與子集 SHA256 及涵蓋字元記錄於 `tools/font-manifest.json`。不載入 Google Fonts CDN 或第三方資產。瀏覽器不支援或字型載入失敗時使用系統宋體／serif fallback。
+首頁標題使用自架 Noto Serif TC Medium 2.003 子集，正文與政策頁維持系統黑體。WOFF2 為 71,028 bytes，授權全文位於 `assets/fonts/OFL.txt`；官方來源、原檔與子集 SHA256 及涵蓋字元記錄於 `tools/font-manifest.json`。不載入 Google Fonts CDN 或第三方資產。瀏覽器不支援或字型載入失敗時使用系統宋體／serif fallback。
 
 修改首頁 h1–h3、圖說或信件抬頭／署名後，請重新子集化，避免缺字。以下只修改專用 venv，不調整系統 Python：
 
@@ -55,3 +55,5 @@ npm run build
 ```
 
 產品圖 `assets/app-home.jpg` 是已用於商店素材的真實 Android 首頁原檔副本，示範資料，不生成／修改 UI、不加假手機外框。完整來源、裝置與內容檢查見 [素材紀錄](docs/redesign-assets-2026-10-25.md)。新增圖片仍須先檢查帳號、私人照片、邀請碼及 QR，且不得把原生 App 截圖誤稱為官網實機驗收。
+
+`assets/app-tasks.png`／`assets/app-rewards.png` 為嚮家台灣 App Store 已公開的 iPhone 任務／獎勵截圖原檔副本，標示示範資料，透過任務段落的原生展開區查看。兩圖自架、lazy 載入，不增加第三方runtime請求，沒有另行生成或改畫UI。

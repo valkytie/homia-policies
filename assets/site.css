@@ -101,6 +101,14 @@ strong { font-weight: 650; }
 .care-item:last-child { border-bottom: 1px solid var(--line); }
 .care-item h3 { font-size: 1.13rem; margin-bottom: 8px; }
 .care-item p { max-width: 42em; color: var(--muted); font-size: 1rem; line-height: 1.95; }
+.care-item .task-scenario { margin-top: 14px; }
+.task-proof { margin-top: 14px; border-bottom: 0; }
+.task-proof summary { min-height: 44px; padding: 10px 0; font-size: .9rem; }
+.task-shots { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; padding: 14px 0 0; }
+.task-shots figure { width: 100%; max-width: 260px; justify-self: center; }
+.task-shots a { display: block; border: 1px solid var(--line); border-radius: 4px; }
+.task-shots img { width: 100%; height: auto; border-radius: 4px; }
+.task-shots figcaption { margin-top: 10px; color: var(--muted); font-size: .78rem; line-height: 1.8; }
 .gratitude-note { background: var(--peach); padding: 24px 28px; border-radius: 2px; margin-top: 28px; box-shadow: 0 2px 7px #303e3508; }
 .note-label { color: var(--clay); font-size: .76rem; letter-spacing: .1em; margin-bottom: 10px; }
 .gratitude-note h3 { font-size: 1.5rem; line-height: 1.6; color: #634d3d; margin-bottom: 12px; }
@@ -233,6 +241,7 @@ details p a, .footer-fineprint a { display: inline-flex; align-items: center; mi
   .everyday-heading { margin-bottom: 30px; }
   .care-item { padding-block: 24px; }
   .care-item h3 { font-size: 1.04rem; }
+  .task-shots { grid-template-columns: 1fr; }
   .gratitude-note { padding: 24px; }
   .gratitude-note h3 { font-size: 1.45rem; }
   .app-shot { max-width: 280px; }

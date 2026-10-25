@@ -56,7 +56,9 @@ test('keeps the approved founder story, Watch explanation, FAQ answers and polic
   assert.ok(story, 'Founder story must remain present.');
   const paragraphs = [...story.matchAll(/<p\b[^>]*>([\s\S]*?)<\/p>/g)].map(m => textContent(m[1]));
   assert.deepEqual(paragraphs.filter(p => approved.story.includes(p)), approved.story);
-  const details = [...html.matchAll(/<details\b[^>]*>([\s\S]*?)<\/details>/g)];
+  const faq = html.match(/<section\b[^>]*id="faq"[^>]*>([\s\S]*?)<\/section>/)?.[1];
+  assert.ok(faq, 'FAQ section must remain present.');
+  const details = [...faq.matchAll(/<details\b[^>]*>([\s\S]*?)<\/details>/g)];
   assert.equal(details.length, Object.keys(approved.faq).length);
   for (const [, detail] of details) {
     const question = textContent(detail.match(/<summary[^>]*>([\s\S]*?)<\/summary>/)[1]);
