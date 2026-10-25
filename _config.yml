@@ -1,0 +1,10 @@
+# GitHub Pages keeps the legacy public pages; deployment tooling is not public content.
+exclude:
+  - node_modules
+  - dist
+  - tools
+  - test
+  - package.json
+  - package-lock.json
+  - site.config.json
+  - wrangler.jsonc

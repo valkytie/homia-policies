@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.homia-build-*/
+.wrangler/
+.dev.vars*
+.env*
+*.log
