@@ -7,7 +7,7 @@
   --green: #3e5848;
   --sage: #ebeee5;
   --line: #d9ddcf;
-  --clay: #a6573d;
+  --clay: #984b34;
   --peach: #f3e9dc;
   --radius: 24px;
   font-family: -apple-system, BlinkMacSystemFont, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
@@ -21,6 +21,7 @@ img { display: block; max-width: 100%; height: auto; }
 a { color: inherit; text-underline-offset: 5px; }
 button, a { -webkit-tap-highlight-color: transparent; }
 a:focus-visible, summary:focus-visible { outline: 3px solid var(--clay); outline-offset: 6px; border-radius: 4px; }
+.apple-download a:focus-visible { outline-color: var(--paper); }
 ::selection { background: #e0e6d6; color: #24392b; }
 h1, h2, h3, p, figure { margin: 0; }
 h1, h2, h3 { font-weight: 600; text-wrap: balance; }
