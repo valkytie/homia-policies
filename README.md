@@ -2,7 +2,7 @@
 
 Public bilingual (English / 繁體中文) support pages for the Homia / 嚮家 app.
 
-- **[嚮家介紹與下載](https://valkytie.github.io/homia-policies/)** — 設計初衷、App Store QR 碼與 Android 封閉測試中文加入教學。
+- **[嚮家介紹與下載](https://homia-official-site.valkytie.workers.dev/)** — 設計初衷、App Store QR 碼與 Android 封閉測試中文加入教學。
 - **[Report a bug / 回報問題](report-a-bug.html)** — Android／iOS 問題回報、選填截圖與 Email 備用管道。
 - [Privacy Policy / 隱私權政策](privacy-policy.html)
 - [Support and Data Deletion / 客服與資料刪除](support-and-data-deletion.html)
@@ -23,7 +23,7 @@ npm run build
 npm run dev
 ```
 
-`site.config.json` 的 `url` 是正式 HTTPS 網址；建置會以此產生首頁 canonical、Open Graph 與政策頁 canonical。首次發布前需填入帳號實際的 Workers 網址。四份政策 Markdown 是內容來源，建置產物不進 Git。
+`site.config.json` 的 `url` 是正式 HTTPS 網址；建置會以此產生首頁 canonical、Open Graph 與政策頁 canonical。目前使用帳號已註冊的 `valkytie.workers.dev` 下的 `homia-official-site`。四份政策 Markdown 是內容來源，建置產物不進 Git。
 
 Cloudflare 登入由網站擁有者本人完成。若 macOS Keychain 不允許 CLI 儲存憑證，可使用 Wrangler 官方本機檔案儲存方式；憑證留在使用者設定目錄，不得複製到 repo 或 GitHub Secrets。
 
