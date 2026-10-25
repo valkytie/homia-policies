@@ -35,3 +35,5 @@ npm run deploy
 ```
 
 推送 GitHub 不會自動更新 Cloudflare。每次更新都需執行測試與 `npm run deploy`，再以公開網址檢查首頁、四份政策、QR 與不存在路徑的 404。Wrangler 的標準 HTML 路由會將 `privacy-policy.html` 等入口轉向無副檔名網址，原 `.html` 連結仍可開啟。GitHub Pages 原有政策網址持續保留，既有 App／商店設定可繼續使用。
+
+舊 GitHub Pages 首頁會以 `location.replace` 導向新官網，保留查詢與段落錨點；僅限本 repo 的首頁路徑，不影響任何政策／客服頁。停用 JavaScript 時仍可閱讀原內容，並使用頁尾的「嚮家官網」連結。Cloudflare 官網不會再轉址。

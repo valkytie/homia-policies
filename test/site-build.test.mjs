@@ -5,6 +5,7 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
+import { runInNewContext } from 'node:vm';
 
 const project = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const builder = path.join(project, 'tools/build-site.mjs');
@@ -115,4 +116,30 @@ test('rebuilding unchanged inputs produces identical files', async t => {
   for (const [index, name] of list.entries()) {
     assert.deepEqual(await readFile(path.join(root, 'dist', name)), snapshot[index], name);
   }
+});
+
+test('legacy homepage redirects to the official site, preserves anchors and leaves policy routes alone', async () => {
+  const homepage = await readFile(path.join(project, 'index.html'), 'utf8');
+  const script = homepage.match(/<script id="legacy-home-redirect">([\s\S]*?)<\/script>/)?.[1];
+  assert.ok(script, 'Legacy GitHub homepage must guide visitors to the new official site.');
+  for (const pathname of ['/homia-policies/', '/homia-policies/index.html']) {
+    const destinations = [];
+    runInNewContext(script, { location: {
+      hostname: 'valkytie.github.io', pathname, search: '?from=old', hash: '#android',
+      replace: url => destinations.push(url)
+    }});
+    assert.deepEqual(destinations, ['https://homia-official-site.valkytie.workers.dev/?from=old#android']);
+  }
+  for (const [hostname, pathname] of [
+    ['homia-official-site.valkytie.workers.dev', '/'],
+    ['valkytie.github.io', '/homia-policies/privacy-policy.html'],
+    ['valkytie.github.io', '/another-project/'],
+    ['example.com', '/homia-policies/']
+  ]) {
+    runInNewContext(script, { location: {
+      hostname, pathname, search: '', hash: '',
+      replace: () => assert.fail(`Unexpected redirect from ${hostname}${pathname}`)
+    }});
+  }
+  assert.ok(homepage.includes('href="https://homia-official-site.valkytie.workers.dev/">嚮家官網'));
 });
