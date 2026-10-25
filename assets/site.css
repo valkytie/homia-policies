@@ -88,6 +88,18 @@ strong { font-weight: 650; }
 .note-rule { height: 1px; width: 38px; background: #b69f82; margin-block: 26px; }
 .gratitude-note > p:not(.note-label) { font-size: .94rem; color: #6d5d4d; margin-top: 20px; line-height: 2; }
 .gratitude-note .note-ending { font-weight: 600; }
+.watch-feature { display: grid; grid-template-columns: 1.05fr 1fr; align-items: start; gap: 64px; margin-top: 72px; padding: 46px; border: 1px solid #cbd4c1; border-radius: var(--radius); background: var(--sage); }
+.watch-copy h3 { font-size: clamp(1.7rem, 2.8vw, 2.35rem); line-height: 1.65; margin-bottom: 22px; }
+.watch-copy h3 em { font-style: normal; color: var(--clay); }
+.watch-copy > p:not(.eyebrow) { color: var(--muted); font-size: .94rem; line-height: 2; }
+.watch-copy > p + p { margin-top: 17px; }
+.watch-steps { list-style: none; margin: 0; padding: 0; }
+.watch-steps li { display: grid; grid-template-columns: 28px 1fr; gap: 13px; padding-block: 19px; border-bottom: 1px solid #d0d8c8; }
+.watch-steps li:first-child { padding-top: 0; }
+.watch-steps li > span { color: var(--clay); font-size: .75rem; padding-top: 5px; }
+.watch-steps h4 { margin: 0 0 8px; font-size: 1rem; font-weight: 600; }
+.watch-steps p { color: var(--muted); font-size: .9rem; }
+.watch-conditions { margin-top: 22px; color: var(--muted); font-size: .76rem; line-height: 1.95; }
 .privacy-band { background: #f0f1e9; }
 .privacy-grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: 100px; }
 .privacy-details > div { display: grid; grid-template-columns: 32px 1fr; column-gap: 13px; padding-bottom: 24px; }
@@ -204,6 +216,8 @@ details p + p { margin-top: 14px; }
   .care-item p { font-size: .91rem; }
   .gratitude-note { padding: 32px; margin-inline: 4px; transform: rotate(.6deg); }
   .gratitude-note h3 { font-size: 1.8rem; }
+  .watch-feature { grid-template-columns: 1fr; gap: 30px; padding: 28px 22px; margin-top: 44px; }
+  .watch-copy h3 { font-size: 1.8rem; }
   .privacy-details > div:last-child { padding-bottom: 0; }
   .download-heading { text-align: left; margin-bottom: 30px; }
   .download-heading br { display: none; }
