@@ -21,10 +21,16 @@
 
 ## 執行與檢查
 
-- [ ] Task 1：先修測試漏洞。讓含屬性的body擷取失敗時明確報錯，測試先RED再GREEN；加入故事與政策相對b87489c的固定內容保護。
-- [ ] Task 2：依規格Phase1與上述修正完成tokens、宋體、自架授權與維護工具、裝飾減量；npm test與build後獨立審查。
-- [ ] Task 3：依Phase2完成家書、Watch、FAQ與版面；提早加入真實Android首頁及來源文件。前兩階段逐次commit，可獨立回滾。
-- [ ] Task 4：核對正式Wrangler本機首頁、四政策、404、所有資產、QR、字型覆蓋與政策無字型下載；有可用IAB時驗1440／768／390及全部指定斷點、鍵盤、FAQ、字型與網路請求；無可用surface時明列缺證據，不改用其他瀏覽器。
-- [ ] Task 5：獨立規格及程式審查；完整Flutter test／analyze／format（App只改QA文件）、網站test／build／diff gate；更新QA矩陣與知識筆記、commit／pull rebase／push test，保留原SwiftPM私人修改。
+- [x] Task 1：先修測試漏洞。讓含屬性的body擷取失敗時明確報錯，測試先RED再GREEN；加入故事與政策相對b87489c的固定內容保護。
+- [x] Task 2：依規格Phase1與上述修正完成tokens、宋體、自架授權與維護工具、裝飾減量；npm test與build後獨立審查。
+- [x] Task 3：依Phase2完成家書、Watch、FAQ與版面；提早加入真實Android首頁及來源文件。前兩階段逐次commit，可獨立回滾。
+- [x] Task 4：核對正式Wrangler本機首頁、四政策、404、所有資產、QR、字型覆蓋與政策字型隔離；IAB後續已可用，完成七種指定CSS寬度、鍵盤、FAQ、字型與觀察資產來源；未改用其他瀏覽器。實際停用JS、reduced-motion模式及可比LCP尚待補證，不列通過。
+- [x] Task 5：獨立規格及程式審查；完整Flutter test／analyze／format（App只改QA文件）、網站test／build／diff gate；更新QA矩陣與知識筆記，依規則提交／推送test，保留原SwiftPM私人修改。
 
 本輪QA矩陣位於mama-helper/docs/qa/website-redesign-2026-10-25.md。自動測試與靜態結構檢查不等於目視或實機驗收；正式站保持舊版，部署仍需擁有者另行決定。
+
+## 結果與限制
+
+實作ff00582；Phase1 d0d0b96、素材與測試d64427b。Node12/12、font cmap282字／69728bytes、本機16個檔案200與未知404通過。IAB在320／359／390／768／1024／1100／1440實讀無水平溢出；兩階段獨立規格及品質審查均通過。320手機品牌連結觸控高度40px不足已修為44px並重驗；沒有為了去AI感強制縮小內文或捏造產品畫面。
+
+沒有合併main、建立發布PR或部署；依規格留在test供審閱。仍缺實體手機網站驗收、LCP前後同條件比較、實際停用JS／reduced-motion模式測試。既有Wrangler開發依賴audit回3項（2 moderate、1 high），lockfile未動，沒有執行不受控audit fix；靜態dist不包含該工具鏈。
